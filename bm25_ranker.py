@@ -33,7 +33,7 @@ def run_queries(index_dir, queries, run_file, collection_file, depth=1000):
         for qid, query_str in tqdm(queries.items(), desc=f"Running {len(queries)} queries"):
             for r in search(searcher, query_str, depth):
                 out_file.write(f"{qid}\tQ0\t{r['doc']}\t{r['rank']}\t{r['score']:.4f}\t{run_file}\n")
-                collection[r['doc']] = searcher.doc(r['doc']).contents().replace("\n", " ")
+                collection[r['doc']] = searcher.doc(r['doc']).contents().replace("\n", " ").replace("\t", " ")
 
     if collection_file:
         with open(collection_file, 'w') as out_file:

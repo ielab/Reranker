@@ -76,7 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--depth', type=int, default=1000, help='Retrieve up to rank depth.')
     parser.add_argument('--collection', help="File to write collection")
     parser.add_argument('--k1', default=0.6, type=float, help='BM25 k1 parameter.')
-    parser.add_argument('--b', default=0.8, type=float, help='BM25 b parameter.')
+    parser.add_argument('--b', default=0.7, type=float, help='BM25 b parameter.')
     parser.add_argument('--bm25_tune', action='store_true', help='Run a suit of BM25 params.')
     parser.add_argument('--rm3', action='store_true', help='Run RM3.')
     parser.add_argument('ranking', help="File to write ranking")

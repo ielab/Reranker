@@ -30,14 +30,14 @@ args = parser.parse_args()
 def read_qrel():
     import gzip, csv
     qrel = {}
-    with gzip.open(args.qrel, 'rt', encoding='utf8') as f:
-        tsvreader = csv.reader(f, delimiter=" ")
+    with open(args.qrel, 'rt', encoding='utf8') as f:
+        tsvreader = csv.reader(f, delimiter="\t")
         for [topicid, _, docid, rel] in tsvreader:
-            assert rel == "1"
-            if topicid in qrel:
-                qrel[topicid].append(docid)
-            else:
-                qrel[topicid] = [docid]
+            if int(rel) > 0:
+                if topicid in qrel:
+                    qrel[topicid].append(docid)
+                else:
+                    qrel[topicid] = [docid]
     return qrel
 
 
@@ -46,7 +46,7 @@ rankings = defaultdict(list)
 no_judge = set()
 with open(args.rank_file) as f:
     for l in f:
-        qid, pid, rank = l.split()
+        qid, _, pid, rank, score, _ = l.split()
         if qid not in qrel:
             no_judge.add(qid)
             continue
@@ -71,7 +71,7 @@ qry_collection = datasets.load_dataset(
     'csv',
     data_files=qry_collection,
     column_names=['qid', 'qry'],
-    delimiter='\t',
+    delimiter=',',
     ignore_verifications=True,
 )['train']
 
@@ -104,7 +104,7 @@ with open(out_file, 'w') as f:
             did, url, title, body = (item[k] for k in columns)
             url, title, body = map(lambda v: v if v else '', [url, title, body])
             encoded_neg = tokenizer.encode(
-                url + tokenizer.sep_token + title + tokenizer.sep_token + body,
+                url,
                 add_special_tokens=False,
                 max_length=args.truncate,
                 truncation=True
@@ -120,7 +120,7 @@ with open(out_file, 'w') as f:
             did, url, title, body = (item[k] for k in columns)
             url, title, body = map(lambda v: v if v else '', [url, title, body])
             encoded_pos = tokenizer.encode(
-                url + tokenizer.sep_token + title + tokenizer.sep_token + body,
+                url,
                 add_special_tokens=False,
                 max_length=args.truncate,
                 truncation=True

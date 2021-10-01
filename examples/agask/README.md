@@ -6,7 +6,7 @@ First create the feature JSON file:
 
 ```bash
 python helpers/build_train_from_ranking_agask.py \
-  --tokenizer_name /Users/koo01a/Documents/Reranker/pt-bert-large-msmarco \
+  --tokenizer_name nboost/pt-bert-large-msmarco \
   --qrel qrels/qrel-known_item-passage.tsv \
   --json_dir feature_json \
   --query_collection queries/agask_questions-train_not50.csv \
@@ -33,7 +33,7 @@ python3 run_agask.py \
   --fp16 \
   --do_train \
   --output_dir models/agask_model \
-  --model_name_or_path pt-bert-large-msmarco \
+  --model_name_or_path nboost/pt-bert-large-msmarco \
   --train_dir feature_json \
   --overwrite_output_dir
 ```

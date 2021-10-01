@@ -18,7 +18,7 @@ parser.add_argument('--truncate', type=int, default=512)
 
 parser.add_argument('--sample_from_top', type=int, required=True)
 parser.add_argument('--n_sample', type=int, default=100)
-parser.add_argument('--random', action='store_true')
+parser.add_argument('--random', action='store_true', default=True)
 parser.add_argument('--json_dir', required=True)
 
 parser.add_argument('--qrel', required=True)
@@ -57,12 +57,12 @@ with open(args.rank_file) as f:
 
 print(f'{len(no_judge)} queries not judged and skipped', flush=True)
 
-columns = ['did', 'url', 'title', 'body']
+columns = ['did', 'body']
 collection = args.doc_collection
 collection = datasets.load_dataset(
     'csv',
     data_files=collection,
-    column_names=['did', 'url', 'title', 'body'],
+    column_names=columns,
     delimiter='\t',
     ignore_verifications=True,
 )['train']
@@ -101,10 +101,10 @@ with open(out_file, 'w') as f:
         for neg in negs:
             idx = doc_map[neg]
             item = collection[idx]
-            did, url, title, body = (item[k] for k in columns)
-            url, title, body = map(lambda v: v if v else '', [url, title, body])
+            did, body = (item[k] for k in columns)
+            # url, title, body = map(lambda v: v if v else '', [url, title, body])
             encoded_neg = tokenizer.encode(
-                url,
+                body,
                 add_special_tokens=False,
                 max_length=args.truncate,
                 truncation=True
@@ -117,10 +117,10 @@ with open(out_file, 'w') as f:
         for pos in qrel[qid]:
             idx = doc_map[pos]
             item = collection[idx]
-            did, url, title, body = (item[k] for k in columns)
-            url, title, body = map(lambda v: v if v else '', [url, title, body])
+            did, body = (item[k] for k in columns)
+            # url, title, body = map(lambda v: v if v else '', [url, title, body])
             encoded_pos = tokenizer.encode(
-                url,
+                body,
                 add_special_tokens=False,
                 max_length=args.truncate,
                 truncation=True

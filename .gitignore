@@ -8,3 +8,4 @@ pt-bert-large-msmarco
 *_slurm_*.err
 examples/agask/agask_model/
 examples/agask/feature_json/
+roberta-large

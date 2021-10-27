@@ -17,7 +17,7 @@
 #################
 
 # gpus per node
-#SBATCH --gres=gpu:3
+#SBATCH --gres=gpu:1
 #################
 
 # cpus per job
@@ -53,7 +53,7 @@ srun python3 run_agask.py \
   --max_len 512 \
   --cache_dir cache\
   --per_device_train_batch_size 2 \
-  --train_group_size 6 \
+  --train_group_size 2 \
   --gradient_accumulation_steps 2 \
   --weight_decay 0.01 \
   --learning_rate 1e-6 \
@@ -61,7 +61,7 @@ srun python3 run_agask.py \
   --dataloader_num_workers 8 \
   --fp16 \
   --do_train \
-  --output_dir agask_model_custom_params \
-  --model_name_or_path /scratch1/koo01a/Reranker/pt-bert-large-msmarco \
-  --train_dir feature_json \
+  --output_dir models/agask_model_roberta \
+  --model_name_or_path /scratch1/koo01a/Reranker/roberta-large-masmarco \
+  --train_dir feature_json_roberta \
   --overwrite_output_dir

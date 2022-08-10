@@ -36,6 +36,8 @@ pip install .
 ```
 Reranker has been tested with `torch==1.6.0, transformers==4.2.0, datasets==1.1.3`.
 
+**Note:** `transformers==4.2.0` had a bug that throws a torch NameError which was [fixed](https://github.com/huggingface/transformers/issues/9580) in version `transformers==4.2.1`.
+
 For development, install as editable,
 ```
 pip install -e .

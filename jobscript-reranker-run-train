@@ -59,7 +59,7 @@ srun python3 run_agask.py \
    --dataloader_num_workers 8 \
    --fp16 \
    --do_train \
-   --output_dir examples/agask/agask_model_custom_params \
+   --output_dir examples/agask/models/agask_model_custom_params_queries \
    --model_name_or_path /scratch1/koo01a/pt-bert-large-msmarco \
    --train_dir examples/agask/feature_json \
    --overwrite_output_dir

@@ -29,7 +29,7 @@
 #################
 
 # memory per node
-#SBATCH --mem=10GB
+#SBATCH --mem=8GB
 #################
 
 # slurm will send a signal this far out before it kills the job
@@ -42,15 +42,24 @@
 #################
 
 module load cuda
-module load tensorflow/2.5.0-py39-cuda112
+#module load tensorflow/2.5.0-py39-cuda112
 source venv/bin/activate
 
 
-srun python bert_reranker.py \
-	--run_file examples/agask/runs/run-bm25-agask-query-test50.res \
-	--collection_file examples/agask/collection/agask_collection-test50.tsv \
-	--query_file /home/koo01a/scratch/agvaluate/data/queries/agask_questions-test50.csv \
-	--model_name_or_path examples/agask/models/agask_model_custom_params_queries \
-	--tokenizer_name_or_path examples/agask/models/agask_model_custom_params_queries \
-	--batch_size 32 \
-	--cut_off 500
+srun python3 run_agask.py \
+   --save_steps 2000 \
+   --max_len 512 \
+   --cache_dir cache\
+   --per_device_train_batch_size 2 \
+   --train_group_size 2 \
+   --gradient_accumulation_steps 2 \
+   --weight_decay 0.01 \
+   --learning_rate 1e-6 \
+   --num_train_epochs 10 \
+   --dataloader_num_workers 8 \
+   --fp16 \
+   --do_train \
+   --output_dir examples/agask/models/agask_model_custom_params_queries \
+   --model_name_or_path /scratch1/koo01a/pt-bert-large-msmarco \
+   --train_dir examples/agask/feature_json \
+   --overwrite_output_dir
